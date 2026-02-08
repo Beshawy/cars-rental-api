@@ -66,7 +66,11 @@ const swaggerOptions = {
             },
         },
     },
-    apis: ['./src/routes/*.js', './src/controllers/*.js'], // مكان البحث عن التوثيق (JSDoc)
+    apis: [
+        './src/routes/authRoutes.js',
+        './src/routes/*.js',
+        './src/controllers/*.js'
+    ], // مكان البحث عن التوثيق (JSDoc)
 };
 
 const swaggerSpec = swaggerJsdoc(swaggerOptions);
