@@ -25,6 +25,8 @@ const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 const hpp = require('hpp');
 const morgan = require('morgan');
+const swaggerJsdoc = require('swagger-jsdoc');
+const swaggerUi = require('swagger-ui-express');
 
 
 // Connect to database 
@@ -34,6 +36,47 @@ const app = express();
 
 // cron job
 require('./reservationCron');
+
+// =====================
+// Swagger Configuration
+// =====================
+const swaggerOptions = {
+    definition: {
+        openapi: '3.0.0',
+        info: {
+            title: 'CARS ERP API Documentation',
+            version: '1.0.0',
+            description: 'API Documentation for the CARS ERP management system',
+        },
+        servers: [
+            {
+                url: process.env.NODE_ENV === 'production'
+                    ? 'https://your-vercel-domain.vercel.app' // استبدله برابط موقعك على فيرسل
+                    : `http://localhost:${process.env.PORT || 5000}`,
+                description: 'API Server',
+            },
+        ],
+        components: {
+            securitySchemes: {
+                bearerAuth: {
+                    type: 'http',
+                    scheme: 'bearer',
+                    bearerFormat: 'JWT',
+                },
+            },
+        },
+    },
+    apis: ['./src/routes/*.js', './src/controllers/*.js'], // مكان البحث عن التوثيق (JSDoc)
+};
+
+const swaggerSpec = swaggerJsdoc(swaggerOptions);
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
+// Endpoint to get raw swagger JSON - useful for uploading to external sites
+app.get('/swagger.json', (req, res) => {
+    res.setHeader('Content-Type', 'application/json');
+    res.send(swaggerSpec);
+});
 
 
 // Middleware & Security

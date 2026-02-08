@@ -20,9 +20,6 @@ router.get(
   emergencyController.getAllEmergencies
 );
 
-//فيما بعد
-//فيما بعد
-//فيما بعد
 
 router.patch(
   '/:id/status',
