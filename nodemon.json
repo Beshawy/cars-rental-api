@@ -1,0 +1,11 @@
+{
+    "watch": [
+        "src"
+    ],
+    "ext": "js,json,env",
+    "legacyWatch": true,
+    "watchOptions": {
+        "usePolling": true,
+        "interval": 200
+    }
+} 
