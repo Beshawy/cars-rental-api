@@ -80,6 +80,13 @@ app.use(hpp());
 // =====================
 // Routes
 // =====================
+app.get('/', (req, res) => {
+    res.status(200).json({
+        status: 'success',
+        message: 'Welcome to CARS ERP API'
+    });
+});
+
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/profile', profileRouter);
 app.use('/api/v1/admin', adminRouter);
@@ -101,12 +108,16 @@ app.use(notFoundMiddleware);
 
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-});
+if (process.env.NODE_ENV !== 'production') {
+    app.listen(PORT, () => {
+        console.log(`Server running on port ${PORT}`);
+    });
+}
 
 
 app.use(globalErrorHandler);
+
+module.exports = app;
 
 
 
